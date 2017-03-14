@@ -180,12 +180,13 @@ void GameStateMatch::update(const float delta) {
     GameManager::instance()->updateMarines(delta);
     GameManager::instance()->updateZombies(delta);
 
-    // Move Camera
+    // Move Camera + handling to ensure spectator support
     if (player.marine != nullptr) {
         camera.move(player.marine->getX(), player.marine->getY());
+    } else {
+        player.moveGhost(delta);
+        camera.move(player.getGhost().getX(),player.getGhost().getY());
     }
-    
-
 
 }
 

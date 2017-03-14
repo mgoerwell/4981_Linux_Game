@@ -82,10 +82,11 @@ void Player::handleKeyboardInput(const Uint8 *state) {
     float x = 0;
     float y = 0;
     float velocity;
+    //Check to see if we are currently a marine or a spectator (ghost)
     if (marine != nullptr) {
         velocity = marine->getVelocity();
     } else {
-        velocity = 0;
+        velocity = GHOST_VELOCITY;
     }
     
 
@@ -125,17 +126,19 @@ void Player::handleKeyboardInput(const Uint8 *state) {
             marine->inventory.useItem();
         }
         if(state[SDL_SCANCODE_K]) {
+            ghost.setPosition(marine->getX(),marine->getY());
             GameManager::instance()->deleteMarine(0);
             marine = nullptr;
         }
 
     }
-
+    //Movement updates
     if (marine != nullptr) {
-            marine->setDY(y);
-            marine->setDX(x);
+        marine->setDY(y);
+        marine->setDX(x);
     } else {
-
+        ghost.setDX(x);
+        ghost.setDY(y);
     }
 
 }
@@ -164,4 +167,9 @@ void Player::handleTempTurret(SDL_Renderer *renderer) {
        GameManager::instance()->deleteTurret(tempTurretID);
        tempTurretID = -1;
    }
+}
+
+//This method updates the spectators position on the map, for the purpose of camera tracking.
+void Player::moveGhost(const float delta) {
+    ghost.move(ghost.getDX()*delta,ghost.getDY()*delta,GameManager::instance()->getCollisionHandler());   
 }

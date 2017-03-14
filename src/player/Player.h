@@ -26,6 +26,10 @@ public:
     void handleTempBarricade(SDL_Renderer *renderer);
     void handleTempTurret(SDL_Renderer *renderer);
 
+    //Added by Matt Goerwell 03/14/2017
+    Ghost& getGhost() {return ghost;}
+    void moveGhost(const float delta);
+
     Player();
     ~Player();
 
@@ -33,6 +37,7 @@ public:
     Marine *marine = NULL;
 
 private:
+    Ghost ghost;
     int tempBarricadeID;
     int tempTurretID;
 };
