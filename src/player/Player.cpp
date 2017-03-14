@@ -26,8 +26,10 @@ void Player::handleMouseUpdate(Window& w, float camX, float camY) {
     mouseDeltaY = w.getHeight()/2 - mouseY;
 
     double angle = ((atan2(mouseDeltaX, mouseDeltaY)* radianConvert)/M_PI) * - 1;
-
-    marine->setAngle(angle);
+    if (marine != nullptr) {
+        marine->setAngle(angle);
+    }
+    
 
     if (tempBarricadeID > -1) {
         Barricade &tempBarricade = GameManager::instance()->getBarricade(tempBarricadeID);
@@ -79,7 +81,13 @@ void Player::handlePlacementClick(SDL_Renderer *renderer) {
 void Player::handleKeyboardInput(const Uint8 *state) {
     float x = 0;
     float y = 0;
-    float velocity = marine->getVelocity();
+    float velocity;
+    if (marine != nullptr) {
+        velocity = marine->getVelocity();
+    } else {
+        velocity = 0;
+    }
+    
 
     // Check for move inputs
     if (state[SDL_SCANCODE_UP] || state[SDL_SCANCODE_W]) {
@@ -95,27 +103,41 @@ void Player::handleKeyboardInput(const Uint8 *state) {
         x += velocity;
     }
 
-    //Inventory inputs
-    if (state[SDL_SCANCODE_1]){
-        marine->inventory.switchCurrent(0);
-    } else if (state[SDL_SCANCODE_2]){
-        marine->inventory.switchCurrent(1);
-    } else if (state[SDL_SCANCODE_3]){
-        marine->inventory.switchCurrent(2);
+    
+    if (marine != nullptr) {
+        //Inventory inputs
+        if (state[SDL_SCANCODE_1]){
+            marine->inventory.switchCurrent(0);
+        } else if (state[SDL_SCANCODE_2]){
+            marine->inventory.switchCurrent(1);
+        } else if (state[SDL_SCANCODE_3]){
+            marine->inventory.switchCurrent(2);
+        }
+
+        //Weapon input
+        if(state[SDL_SCANCODE_R]){
+            marine->inventory.getCurrent()->reloadClip();
+        }
+        if(state[SDL_SCANCODE_E]){
+            marine->checkForPickUp();
+        }
+        if(state[SDL_SCANCODE_I]) {
+            marine->inventory.useItem();
+        }
+        if(state[SDL_SCANCODE_K]) {
+            GameManager::instance()->deleteMarine(0);
+            marine = nullptr;
+        }
+
     }
 
-    //Weapon input
-    if(state[SDL_SCANCODE_R]){
-        marine->inventory.getCurrent()->reloadClip();
+    if (marine != nullptr) {
+            marine->setDY(y);
+            marine->setDX(x);
+    } else {
+
     }
-    if(state[SDL_SCANCODE_E]){
-        marine->checkForPickUp();
-    }
-    if(state[SDL_SCANCODE_I]) {
-        marine->inventory.useItem();
-    }
-    marine->setDY(y);
-    marine->setDX(x);
+
 }
 
 void Player::handleTempBarricade(SDL_Renderer *renderer) {

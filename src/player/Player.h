@@ -3,6 +3,7 @@
 #include <string>
 #include "../sprites/LTexture.h"
 #include "../player/Marine.h"
+#include "../player/Ghost.h"
 #include "../turrets/Turret.h"
 #include "../inventory/Inventory.h"
 #include <SDL2/SDL.h>

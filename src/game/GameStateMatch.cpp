@@ -181,7 +181,10 @@ void GameStateMatch::update(const float delta) {
     GameManager::instance()->updateZombies(delta);
 
     // Move Camera
-    camera.move(player.marine->getX(), player.marine->getY());
+    if (player.marine != nullptr) {
+        camera.move(player.marine->getX(), player.marine->getY());
+    }
+    
 
 
 }
