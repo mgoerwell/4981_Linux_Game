@@ -26,7 +26,6 @@
 class GameManager {
 public:
     static GameManager *instance();
-    ~GameManager();
 
     int32_t generateID();
 
@@ -47,6 +46,7 @@ public:
     bool addTurret(const int32_t id, const Turret& newTurret);
     int32_t createTurret(SDL_Renderer* gRenderer, const float x, const float y) ;
     Turret& getTurret(const int32_t id);
+    auto& getTurretManager() const {return turretManager;};
 
     // Method for getting collisionHandler
     CollisionHandler& getCollisionHandler();
@@ -77,10 +77,12 @@ public:
     int32_t createWall(SDL_Renderer* gRenderer, const float x, const float y, const int h, const int w); // create Wall object
     void setBoundary(SDL_Renderer* gRenderer, const float startX, const float startY, const float endX, const float endY); // place walls for the boundaries
 
-private:
-    static GameManager *sInstance;
 
+private:
     GameManager();
+    ~GameManager();
+    static GameManager sInstance;
+
     CollisionHandler collisionHandler;
     std::unique_ptr<WeaponDrop> wdPointer;
     std::map<int32_t, Marine> marineManager;
@@ -90,6 +92,7 @@ private:
     std::map<int32_t, WeaponDrop> weaponDropManager;
     std::map<int32_t, std::shared_ptr<Weapon>> weaponManager;
     std::map<int32_t, Barricade> barricadeManager;
+    std::map<int32_t, Wall> wallManager;
 
 };
 

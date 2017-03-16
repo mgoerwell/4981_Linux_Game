@@ -9,6 +9,8 @@
 #include <SDL2/SDL.h>
 #include "../game/GameManager.h"
 
+constexpr int PLAYER_PLACE_DISTANCE = 100;
+
 class Player {
 public:
 
@@ -37,9 +39,13 @@ public:
     Marine *marine = NULL;
 
 private:
-    Ghost ghost;
     int tempBarricadeID;
     int tempTurretID;
+    bool holdingTurret;
+    int pickupTick;
+    int pickupDelay;
+    //entity to control camera while player is dead.
+    Ghost ghost;
 };
 
 #endif

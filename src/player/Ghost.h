@@ -21,13 +21,15 @@
 class Ghost : public Movable {
 public:
     //ctor
-    Ghost();
+    Ghost(int32_t id, const SDL_Rect dest);
     //dtor
     virtual ~Ghost();
     //required by parent
     void onCollision();
     //required by parent
     void collidingProjectile(int damage);
+    //ghost specific movement rules.
+    void move(float moveX, float moveY, CollisionHandler &ch) override;
 };
 
 #endif
